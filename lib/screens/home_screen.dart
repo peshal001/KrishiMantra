@@ -19,15 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int _premiumCurrentIndex = 0;
 
   final List<String> _expertBanners = [
-    "assets/images/banner1.png",
-    "assets/images/banner2.png",
-    "assets/images/banner3.png"
+    "assets/images/logo.png",
+    "assets/images/logo.png",
+    "assets/images/logo.png"
   ];
 
   final List<String> _premiumBanners = [
-    "assets/images/banner4.png",
-    "assets/images/banner5.png",
-    "assets/images/banner6.png"
+    "assets/images/logo.png",
+    "assets/images/logo.png",
+    "assets/images/logo.png"
   ];
 
   final List<Map<String, dynamic>> _features = [
@@ -39,6 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
     {"title": "Buy Supplies", "icon": Icons.shopping_cart},
     {"title": "Sell Your Produce", "icon": Icons.sell},
     {"title": "AI Assistance", "icon": Icons.smart_toy},
+  ];
+
+  final List<Map<String, String>> _whyKrishiMantra = [
+    {"title": "AI-powered Insights", "description": "Smart farming recommendations with AI-driven data."},
+    {"title": "Market Network", "description": "Connect with buyers and sellers across the country."},
+    {"title": "Expert Consultation", "description": "Get professional advice from agricultural experts."},
+    {"title": "Weather Forecasting", "description": "Accurate weather predictions for better planning."},
+    {"title": "Disease Detection", "description": "Identify and treat crop diseases efficiently."},
   ];
 
   @override
@@ -83,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Text("Welcome, $userName!", style: const TextStyle(fontSize: 18)),
       actions: [
         IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
+        CircleAvatar(backgroundImage: AssetImage("assets/images/logo.png")),
         const SizedBox(width: 10),
       ],
     );
@@ -120,9 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSectionTitle(String title) {
-    return Text(title,
-        style: TextStyle(
-            fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green.shade800));
+    return Text(
+      title,
+      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green.shade800),
+    );
   }
 
   Widget _buildSlider(List<String> images, int currentIndex, Function(int) onPageChanged) {
@@ -186,54 +196,48 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Icon(icon, size: 50, color: Colors.green.shade700),
           const SizedBox(height: 10),
-          Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildWhyKrishiMantra() {
-    final List<String> whyKrishiMantraFeatures = [
-      "AI-powered insights for smarter farming",
-      "Access a wide network of buyers and sellers",
-      "Connect with agricultural experts for advice",
-      "Stay updated with accurate weather forecasts",
-      "Detect and manage crop diseases with AI assistance",
-      "Get crop suggestions based on the season and region",
-      "Real-time market price updates for better selling",
-      "Automated farm management tools to increase efficiency",
-    ];
-
-    return SizedBox(
-      height: 120,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(whyKrishiMantraFeatures.length, (index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: _buildWhyKrishiMantraCard(whyKrishiMantraFeatures[index]),
-            );
-          }),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWhyKrishiMantraCard(String text) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      child: Container(
-        width: 200,
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: _whyKrishiMantra.map((item) {
+          return Container(
+            margin: const EdgeInsets.only(right: 20),
+            padding: const EdgeInsets.all(16),
+            width: 250,
+            decoration: BoxDecoration(
+              color: Colors.green.shade50,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(color: Colors.grey.shade300, blurRadius: 6, spreadRadius: 2),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item['title']!,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  item['description']!,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
