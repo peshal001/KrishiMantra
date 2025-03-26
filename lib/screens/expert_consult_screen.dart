@@ -8,7 +8,7 @@ class ExpertConsultScreen extends StatefulWidget {
 }
 
 class _ExpertConsultScreenState extends State<ExpertConsultScreen> {
-  // Sample expert list
+  // Updated list with more experts
   final List<Map<String, String>> experts = [
     {
       "name": "Dr. Ram Bhandari",
@@ -25,7 +25,38 @@ class _ExpertConsultScreenState extends State<ExpertConsultScreen> {
       "specialization": "Irrigation & Water Management",
       "contact": "+977 9823456789",
     },
+    {
+      "name": "Dr. Sunita Joshi",
+      "specialization": "Plant Pathology & Pest Control",
+      "contact": "+977 9845678901",
+    },
+    {
+      "name": "Dr. Bikash Thapa",
+      "specialization": "Agroforestry & Climate Resilience",
+      "contact": "+977 9856789012",
+    },
+    {
+      "name": "Dr. Suman Lama",
+      "specialization": "Dairy & Livestock Farming",
+      "contact": "+977 9867890123",
+    },
   ];
+
+  // Function to make a phone call (placeholder)
+  void _makePhoneCall(String contact) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Calling $contact...")),
+    );
+    // Use `url_launcher` package to implement actual calling functionality
+  }
+
+  // Function to start a video call (placeholder)
+  void _startVideoCall(String expertName) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Starting video call with $expertName...")),
+    );
+    // You can integrate Jitsi Meet, Zoom SDK, or Agora for real video calling
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,30 +85,26 @@ class _ExpertConsultScreenState extends State<ExpertConsultScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
                       leading: const Icon(Icons.person, color: Colors.green),
-                      title: Text(expert["name"]!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      title: Text(
+                        expert["name"]!,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       subtitle: Text(expert["specialization"]!),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.phone, color: Colors.blue),
-                        onPressed: () {
-                          // Implement call functionality
-                        },
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.phone, color: Colors.blue),
+                            onPressed: () => _makePhoneCall(expert["contact"]!),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.video_call, color: Colors.red),
+                            onPressed: () => _startVideoCall(expert["name"]!),
+                          ),
+                        ],
                       ),
                     ),
                   );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.chat),
-                label: const Text("Chat with AI"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),
-                onPressed: () {
-                  // Implement AI chatbot functionality
                 },
               ),
             ),
