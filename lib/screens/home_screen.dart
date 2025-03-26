@@ -24,9 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentNavIndex = 0;
 
   final List<String> _expertBanners = [
-    "assets/images/logo.png",
-    "assets/images/logo.png",
-    "assets/images/logo.png"
+    "assets/banners/AI Crop Planning.png",
+    "assets/banners/Market Price.png",
+    "assets/banners/Weather Alerts.png"
   ];
 
   final List<String> _premiumBanners = [
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildMainContent() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
