@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:kri/screens/disease_detection_screen.dart';
+import 'package:kri/screens/expert_consult_screen.dart';
+import 'package:kri/screens/market_screen.dart';
+import 'package:kri/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   int _expertCurrentIndex = 0;
   int _premiumCurrentIndex = 0;
+  int _currentNavIndex = 0;
 
   final List<String> _expertBanners = [
     "assets/images/logo.png",
@@ -33,9 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> _features = [
     {"title": "Manage Crop", "icon": Icons.agriculture},
     {"title": "Crop Health", "icon": Icons.healing},
-    {"title": "Expert Advice", "icon": Icons.support_agent},
+    {"title": "Expert Advice", "icon": Icons.support_agent, "screen": const ExpertConsultScreen()},
     {"title": "Weather Forecasts", "icon": Icons.wb_sunny},
-    {"title": "Market Insights", "icon": Icons.store},
+    {"title": "Market Insights", "icon": Icons.store, "screen": const MarketScreen()},
     {"title": "Buy Supplies", "icon": Icons.shopping_cart},
     {"title": "Sell Your Produce", "icon": Icons.sell},
     {"title": "AI Assistance", "icon": Icons.smart_toy},
@@ -73,6 +78,61 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  void _onFeatureTap(String title) {
+    if (title == "Expert Advice") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ExpertConsultScreen()),
+      );
+    } else if (title == "Manage Crop") {
+      // Navigate to Manage Crop screen
+    } else if (title == "Crop Health") {
+      // Navigate to Crop Health screen
+    } else if (title == "Weather Forecasts") {
+      // Navigate to Weather Forecasts screen
+    } else if (title == "Market Insights") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MarketScreen()),
+      );
+    } else if (title == "Buy Supplies") {
+      // Navigate to Buy Supplies screen
+    } else if (title == "Sell Your Produce") {
+      // Navigate to Sell Your Produce screen
+    } else if (title == "AI Assistance") {
+      // Navigate to AI Assistance screen
+    }
+  }
+
+  void _onBottomNavItemTapped(int index) {
+    setState(() {
+      _currentNavIndex = index;
+    });
+    if (index == 0) {
+      // Navigate to Home screen (if already on it, do nothing)
+    } else if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const DiseaseDetectionScreen()),
+      );
+    } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      );
+    } else if (index == 3) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      );
+    } else if (index == 4) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      );
     }
   }
 
@@ -182,26 +242,38 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: _features.length,
       itemBuilder: (context, index) {
         final item = _features[index];
-        return _buildFeatureCard(item["title"], item["icon"]);
+        return _buildFeatureCard(item["title"], item["icon"], item["screen"]);
       },
     );
   }
 
-  Widget _buildFeatureCard(String title, IconData icon) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 6,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 50, color: Colors.green.shade700),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-        ],
+  Widget _buildFeatureCard(String title, IconData icon, Widget? screen) {
+    return GestureDetector(
+      onTap: () {
+        if (screen != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => screen),
+          );
+        } else {
+          _onFeatureTap(title);
+        }
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 6,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 50, color: Colors.green.shade700),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -245,8 +317,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBottomNavBar() {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
+      currentIndex: _currentNavIndex,
       selectedItemColor: Colors.green,
       unselectedItemColor: Colors.grey,
+      onTap: _onBottomNavItemTapped,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: "Scan Crops"),
