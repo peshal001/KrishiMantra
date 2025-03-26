@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:jitsi_meet_flutter_sdk/jitsi_meet_flutter_sdk.dart';
+import 'home_screen.dart';  // Import your other screens here
+import 'disease_detection_screen.dart';
+import 'profile_screen.dart';
 
 class ExpertConsultScreen extends StatefulWidget {
   const ExpertConsultScreen({super.key});
@@ -34,6 +37,7 @@ class _ExpertConsultScreenState extends State<ExpertConsultScreen> {
   ];
 
   final JitsiMeet _jitsiMeet = JitsiMeet();
+  int _currentNavIndex = 0;  // Track selected navigation item
 
   // Function to make a real-time phone call
   void _makePhoneCall(String contact) async {
@@ -65,6 +69,56 @@ class _ExpertConsultScreenState extends State<ExpertConsultScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error starting video call: $error")),
       );
+    }
+  }
+
+  // Bottom navigation bar widget
+  Widget _buildBottomNavBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      currentIndex: _currentNavIndex,
+      selectedItemColor: Colors.green, // Active color
+      unselectedItemColor: Colors.grey, // Inactive color
+      onTap: _onBottomNavItemTapped,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: "Scan Crops"),
+        BottomNavigationBarItem(icon: Icon(Icons.smart_toy), label: "Ask AI"),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+        BottomNavigationBarItem(icon: Icon(Icons.help), label: "Help"),
+      ],
+    );
+  }
+
+  // Function to handle navigation based on selected tab
+  void _onBottomNavItemTapped(int index) {
+    if (_currentNavIndex == index) return; // Prevent reloading the same screen
+
+    setState(() {
+      _currentNavIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+        break;
+      case 1:
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const DiseaseDetectionScreen()));
+        break;
+      case 2:
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+        break;
+      case 3:
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+        break;
+      case 4:
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
+        break;
     }
   }
 
@@ -121,6 +175,7 @@ class _ExpertConsultScreenState extends State<ExpertConsultScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: _buildBottomNavBar(),  // Add the bottom navigation bar here
     );
   }
 }
