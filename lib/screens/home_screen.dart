@@ -191,8 +191,57 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Updated Why KrishiMantra section
   Widget _buildWhyKrishiMantra() {
-    return const Text("KrishiMantra helps farmers with crop management, AI-powered insights, and a strong market network.");
+    final List<Map<String, dynamic>> whyKrishiMantraFeatures = [
+      {"title": "Smart Insights", "icon": Icons.lightbulb, "description": "Get AI-powered insights for smarter farming."},
+      {"title": "Marketplace", "icon": Icons.store, "description": "Access a wide network of buyers and sellers."},
+      {"title": "Expert Consultation", "icon": Icons.support_agent, "description": "Connect with agricultural experts for advice."},
+      {"title": "Weather Forecast", "icon": Icons.wb_sunny, "description": "Stay updated with accurate weather forecasts."},
+      {"title": "Disease Detection", "icon": Icons.healing, "description": "Detect and manage crop diseases with AI assistance."},
+      {"title": "Crop Recommendation", "icon": Icons.agriculture, "description": "Get crop suggestions based on the season and region."},
+    ];
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 1,
+      ),
+      itemCount: whyKrishiMantraFeatures.length,
+      itemBuilder: (context, index) {
+        final feature = whyKrishiMantraFeatures[index];
+        return _buildWhyKrishiMantraCard(feature["title"], feature["icon"], feature["description"]);
+      },
+    );
+  }
+
+  Widget _buildWhyKrishiMantraCard(String title, IconData icon, String description) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 6,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, size: 50, color: Colors.green.shade700),
+          const SizedBox(height: 10),
+          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text(
+              description,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBottomNavBar() {
