@@ -30,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final List<String> _premiumBanners = [
-    "assets/images/logo.png",
-    "assets/images/logo.png",
-    "assets/images/logo.png"
+    "assets/banners/Direct Chat.png",
+    "assets/banners/Bundle Pricing.png",
+    "assets/banners/Combo Pack.png"
   ];
 
   final List<Map<String, dynamic>> _features = [
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.green.shade700,
-      title: Text("Welcome, $userName!", style: const TextStyle(fontSize: 18)),
+      title: Text("Welcome, $userName", style: const TextStyle(fontSize: 18)),
       actions: [
         IconButton(
           icon: const Icon(Icons.notifications),
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildMainContent() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
