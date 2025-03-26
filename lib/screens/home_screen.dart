@@ -150,8 +150,21 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.green.shade700,
       title: Text("Welcome, $userName!", style: const TextStyle(fontSize: 18)),
       actions: [
-        IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
-        CircleAvatar(backgroundImage: AssetImage("assets/images/logo.png")),
+        IconButton(
+          icon: const Icon(Icons.notifications),
+          onPressed: () {},
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          },
+          child: CircleAvatar(
+            backgroundImage: AssetImage("assets/images/logo.png"),
+          ),
+        ),
         const SizedBox(width: 10),
       ],
     );
