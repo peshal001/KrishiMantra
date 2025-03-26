@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:kri/screens/disease_detection_screen.dart';
 import 'package:kri/screens/expert_consult_screen.dart';
+import 'package:kri/screens/knowledge_hub_screen.dart';
 import 'package:kri/screens/market_screen.dart';
 import 'package:kri/screens/profile_screen.dart';
 
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {"title": "Expert Advice", "icon": Icons.support_agent, "screen": const ExpertConsultScreen()},
     {"title": "Weather Forecasts", "icon": Icons.wb_sunny},
     {"title": "Market Insights", "icon": Icons.store, "screen": const MarketScreen()},
-    {"title": "Buy Supplies", "icon": Icons.shopping_cart},
+    {"title": "Knowledge Hub", "icon": Icons.menu_book, "screen": const KnowledgeHubScreen()},
     {"title": "Sell Your Produce", "icon": Icons.sell},
     {"title": "AI Assistance", "icon": Icons.smart_toy},
   ];
