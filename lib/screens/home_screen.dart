@@ -19,15 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int _premiumCurrentIndex = 0;
 
   final List<String> _expertBanners = [
-    "assets/images/logo.png",
-    "assets/images/logo.png",
-    "assets/images/logo.png"
+    "assets/images/banner1.png",
+    "assets/images/banner2.png",
+    "assets/images/banner3.png"
   ];
 
   final List<String> _premiumBanners = [
-    "assets/images/logo.png",
-    "assets/images/logo.png",
-    "assets/images/logo.png"
+    "assets/images/banner4.png",
+    "assets/images/banner5.png",
+    "assets/images/banner6.png"
   ];
 
   final List<Map<String, dynamic>> _features = [
@@ -83,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
       title: Text("Welcome, $userName!", style: const TextStyle(fontSize: 18)),
       actions: [
         IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
-        CircleAvatar(backgroundImage: AssetImage("assets/images/logo.png")),
         const SizedBox(width: 10),
       ],
     );
@@ -121,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSectionTitle(String title) {
-    return Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green.shade800));
+    return Text(title,
+        style: TextStyle(
+            fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green.shade800));
   }
 
   Widget _buildSlider(List<String> images, int currentIndex, Function(int) onPageChanged) {
@@ -191,54 +192,47 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Updated Why KrishiMantra section with horizontal scrolling
   Widget _buildWhyKrishiMantra() {
-    final List<Map<String, dynamic>> whyKrishiMantraFeatures = [
-      {"title": "Smart Insights", "icon": Icons.lightbulb, "description": "Get AI-powered insights for smarter farming."},
-      {"title": "Marketplace", "icon": Icons.store, "description": "Access a wide network of buyers and sellers."},
-      {"title": "Expert Consultation", "icon": Icons.support_agent, "description": "Connect with agricultural experts for advice."},
-      {"title": "Weather Forecast", "icon": Icons.wb_sunny, "description": "Stay updated with accurate weather forecasts."},
-      {"title": "Disease Detection", "icon": Icons.healing, "description": "Detect and manage crop diseases with AI assistance."},
-      {"title": "Crop Recommendation", "icon": Icons.agriculture, "description": "Get crop suggestions based on the season and region."},
+    final List<String> whyKrishiMantraFeatures = [
+      "AI-powered insights for smarter farming",
+      "Access a wide network of buyers and sellers",
+      "Connect with agricultural experts for advice",
+      "Stay updated with accurate weather forecasts",
+      "Detect and manage crop diseases with AI assistance",
+      "Get crop suggestions based on the season and region",
+      "Real-time market price updates for better selling",
+      "Automated farm management tools to increase efficiency",
     ];
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: List.generate(whyKrishiMantraFeatures.length, (index) {
-          final feature = whyKrishiMantraFeatures[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: _buildWhyKrishiMantraCard(feature["title"], feature["icon"], feature["description"]),
-          );
-        }),
+    return SizedBox(
+      height: 120,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(whyKrishiMantraFeatures.length, (index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: _buildWhyKrishiMantraCard(whyKrishiMantraFeatures[index]),
+            );
+          }),
+        ),
       ),
     );
   }
 
-  Widget _buildWhyKrishiMantraCard(String title, IconData icon, String description) {
+  Widget _buildWhyKrishiMantraCard(String text) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 6,
+      elevation: 4,
       child: Container(
         width: 200,
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50, color: Colors.green.shade700),
-            const SizedBox(height: 10),
-            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Text(
-                description,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-            ),
-          ],
+        child: Center(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
         ),
       ),
     );
