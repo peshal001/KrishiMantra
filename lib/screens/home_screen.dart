@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       backgroundColor: Colors.green.shade700,
       title: Text("Welcome, $userName!", style: const TextStyle(fontSize: 18)),
-        actions: [
+      actions: [
         IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
         CircleAvatar(backgroundImage: AssetImage("assets/images/logo.png")),
         const SizedBox(width: 10),
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Updated Why KrishiMantra section
+  // Updated Why KrishiMantra section with horizontal scrolling
   Widget _buildWhyKrishiMantra() {
     final List<Map<String, dynamic>> whyKrishiMantraFeatures = [
       {"title": "Smart Insights", "icon": Icons.lightbulb, "description": "Get AI-powered insights for smarter farming."},
@@ -202,20 +202,17 @@ class _HomeScreenState extends State<HomeScreen> {
       {"title": "Crop Recommendation", "icon": Icons.agriculture, "description": "Get crop suggestions based on the season and region."},
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(whyKrishiMantraFeatures.length, (index) {
+          final feature = whyKrishiMantraFeatures[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: _buildWhyKrishiMantraCard(feature["title"], feature["icon"], feature["description"]),
+          );
+        }),
       ),
-      itemCount: whyKrishiMantraFeatures.length,
-      itemBuilder: (context, index) {
-        final feature = whyKrishiMantraFeatures[index];
-        return _buildWhyKrishiMantraCard(feature["title"], feature["icon"], feature["description"]);
-      },
     );
   }
 
@@ -223,23 +220,26 @@ class _HomeScreenState extends State<HomeScreen> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 6,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(icon, size: 50, color: Colors.green.shade700),
-          const SizedBox(height: 10),
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Text(
-              description,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: Colors.black54),
+      child: Container(
+        width: 200,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 50, color: Colors.green.shade700),
+            const SizedBox(height: 10),
+            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                description,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
