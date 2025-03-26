@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "774083799928",
+    "project_id": "kris-1bf77",
+    "storage_bucket": "kris-1bf77.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774083799928:android:7eab3c5c738104df18f68d",
+        "android_client_info": {
+          "package_name": "com.example.kri"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD847WqJ6TVUe2eyITNH-j_IJ6V7qmPQHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
