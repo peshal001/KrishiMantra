@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildMainContent() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -213,6 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
       options: CarouselOptions(
         autoPlay: true,
         height: 180,
+        viewportFraction: 0.9,
         enlargeCenterPage: true,
         onPageChanged: (index, reason) => onPageChanged(index),
       ),
