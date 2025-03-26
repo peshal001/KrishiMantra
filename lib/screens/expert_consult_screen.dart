@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:jitsi_meet_flutter_sdk/jitsi_meet_flutter_sdk.dart';
 
 class ExpertConsultScreen extends StatefulWidget {
   const ExpertConsultScreen({super.key});
@@ -8,54 +10,62 @@ class ExpertConsultScreen extends StatefulWidget {
 }
 
 class _ExpertConsultScreenState extends State<ExpertConsultScreen> {
-  // Updated list with more experts
   final List<Map<String, String>> experts = [
     {
       "name": "Dr. Ram Bhandari",
       "specialization": "Soil & Crop Management",
-      "contact": "+977 9801234567",
+      "contact": "+9779801234567",
     },
     {
       "name": "Prof. Sita Sharma",
       "specialization": "Pesticides & Organic Farming",
-      "contact": "+977 9812345678",
+      "contact": "+9779812345678",
     },
     {
       "name": "Dr. Arjun K.C.",
       "specialization": "Irrigation & Water Management",
-      "contact": "+977 9823456789",
+      "contact": "+9779823456789",
     },
     {
       "name": "Dr. Sunita Joshi",
       "specialization": "Plant Pathology & Pest Control",
-      "contact": "+977 9845678901",
-    },
-    {
-      "name": "Dr. Bikash Thapa",
-      "specialization": "Agroforestry & Climate Resilience",
-      "contact": "+977 9856789012",
-    },
-    {
-      "name": "Dr. Suman Lama",
-      "specialization": "Dairy & Livestock Farming",
-      "contact": "+977 9867890123",
+      "contact": "+9779845678901",
     },
   ];
 
-  // Function to make a phone call (placeholder)
-  void _makePhoneCall(String contact) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Calling $contact...")),
-    );
-    // Use `url_launcher` package to implement actual calling functionality
+  final JitsiMeet _jitsiMeet = JitsiMeet();
+
+  // Function to make a real-time phone call
+  void _makePhoneCall(String contact) async {
+    final Uri phoneUri = Uri.parse("tel:$contact");
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Could not launch phone call to $contact")),
+      );
+    }
   }
 
-  // Function to start a video call (placeholder)
-  void _startVideoCall(String expertName) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Starting video call with $expertName...")),
-    );
-    // You can integrate Jitsi Meet, Zoom SDK, or Agora for real video calling
+  // Function to start a Jitsi Meet video call
+  void _startVideoCall(String expertName) async {
+    try {
+      final options = JitsiMeetConferenceOptions(
+        room: "ConsultationWith$expertName",
+        serverURL: "https://meet.jit.si",
+        userInfo: JitsiMeetUserInfo(displayName: "User"),
+        configOverrides: {
+          "startWithAudioMuted": false, // Ensure audio is enabled
+          "startWithVideoMuted": false, // Ensure video is enabled
+        },
+      );
+
+      await _jitsiMeet.join(options);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error starting video call: $error")),
+      );
+    }
   }
 
   @override
