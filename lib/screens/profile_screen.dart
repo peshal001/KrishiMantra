@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kri/screens/login_screen.dart';
+import 'package:firebase_database/firebase_database.dart'; // Firebase Database package
+import 'package:firebase_core/firebase_core.dart'; // Firebase Core package
+import 'package:kri/screens/login_screen.dart'; // Navigate to login screen
 
-void main() => runApp(MyApp());
+void main() async {
+  // Ensure Firebase is initialized before the app starts
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -25,8 +31,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // Firebase Firestore reference
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // Firebase Database reference
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   // Profile data variables
   String uid = "Loading...";
@@ -42,23 +48,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _fetchUserData();
   }
 
-  // Fetch user data from Firestore
+  // Fetch user data from Firebase Realtime Database
   Future<void> _fetchUserData() async {
     String userId = "sampleUserId"; // Replace with actual UID (e.g., from FirebaseAuth)
-    DocumentSnapshot userSnapshot = await _firestore.collection('users').doc(userId).get();
 
-    if (userSnapshot.exists) {
-      setState(() {
-        uid = userSnapshot['uid'] ?? "Not Available";
-        username = userSnapshot['username'] ?? "Not Available";
-        firstName = userSnapshot['firstName'] ?? "Not Available";
-        lastName = userSnapshot['lastName'] ?? "Not Available";
-        email = userSnapshot['email'] ?? "Not Available";
-        phoneNumber = userSnapshot['phoneNumber'] ?? "Not Available";
-      });
-    } else {
-      print('User not found');
-    }
+    _database.child('users').child(userId).once().then((DatabaseEvent event) {
+      if (event.snapshot.exists) {
+        Map<dynamic, dynamic> userData = event.snapshot.value as Map<dynamic, dynamic>;
+
+        setState(() {
+          uid = userData['uid'] ?? "Not Available";
+          username = userData['username'] ?? "Not Available";
+          firstName = userData['firstName'] ?? "Not Available";
+          lastName = userData['lastName'] ?? "Not Available";
+          email = userData['email'] ?? "Not Available";
+          phoneNumber = userData['phoneNumber'] ?? "Not Available";
+        });
+      } else {
+        print('User not found');
+      }
+    }).catchError((error) {
+      print('Error fetching user data: $error');
+    });
   }
 
   // Widget to display each profile field
@@ -173,16 +184,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              // Edit Profile Button
+              // Logout Button
               Center(
                 child: ElevatedButton.icon(
-                  icon: const Icon(Icons.edit),
+                  icon: const Icon(Icons.exit_to_app),
                   label: const Text("Logout"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                   onPressed: () {
+                    // Navigate to LoginScreen (replace with your own navigation)
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const LoginScreen()),
