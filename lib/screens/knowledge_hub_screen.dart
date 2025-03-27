@@ -15,8 +15,8 @@ class _KnowledgeHubScreenState extends State<KnowledgeHubScreen> {
     {
       "title": "Best Crops for Nepal's Climate",
       "description": "Learn about the best crops to grow in different regions of Nepal.",
-      "url": "https://example.com/crops-nepal",
-      "image": "assets/banners/AI Crop Planning.png",
+      "url": "https://www.fao.org/4/x6906e/x6906e09.htm",
+      "image": "https://himalayancrops.org/wp-content/uploads/2021/06/Final_Cover-1080x675.jpg",
       "category": "Farming"
     },
   ];
