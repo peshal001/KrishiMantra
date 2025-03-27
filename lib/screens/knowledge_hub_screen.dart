@@ -9,38 +9,16 @@ class KnowledgeHubScreen extends StatefulWidget {
 }
 
 class _KnowledgeHubScreenState extends State<KnowledgeHubScreen> {
-  // Sample articles and guides
+  String selectedCategory = "All";
+
   final List<Map<String, String>> articles = [
     {
       "title": "Best Crops for Nepal's Climate",
       "description": "Learn about the best crops to grow in different regions of Nepal.",
       "url": "https://example.com/crops-nepal",
-      "image": "assets/images/crops.jpg"
+      "image": "assets/banners/AI Crop Planning.png",
+      "category": "Farming"
     },
-    {
-      "title": "Organic Farming Techniques",
-      "description": "A complete guide to organic farming and its benefits.",
-      "url": "https://example.com/organic-farming",
-      "image": "assets/images/organic.jpg"
-    },
-    {
-      "title": "Common Crop Diseases & Prevention",
-      "description": "Identify common crop diseases and how to prevent them.",
-      "url": "https://example.com/crop-diseases",
-      "image": "assets/images/diseases.jpg"
-    },
-    {
-      "title": "Efficient Water Management",
-      "description": "Tips on saving water and improving irrigation techniques.",
-      "url": "https://example.com/water-management",
-      "image": "assets/images/water.jpg"
-    },
-    {
-      "title": "Smart Farming with Technology",
-      "description": "How AI and IoT are transforming modern agriculture.",
-      "url": "https://example.com/smart-farming",
-      "image": "assets/images/smart_farming.jpg"
-    }
   ];
 
   void _launchURL(String url) async {
@@ -56,6 +34,11 @@ class _KnowledgeHubScreenState extends State<KnowledgeHubScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isWideScreen = MediaQuery.of(context).size.width > 600;
+    final List<Map<String, String>> filteredArticles = selectedCategory == "All"
+        ? articles
+        : articles.where((article) => article["category"] == selectedCategory).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Knowledge Hub", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -64,60 +47,113 @@ class _KnowledgeHubScreenState extends State<KnowledgeHubScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: articles.length,
-          itemBuilder: (context, index) {
-            final article = articles[index];
-            return Card(
-              elevation: 4,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                    child: Image.asset(
-                      article["image"]!,
-                      height: 180,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          article["title"]!,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          article["description"]!,
-                          style: const TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        const SizedBox(height: 8),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton.icon(
-                            onPressed: () => _launchURL(article["url"]!),
-                            icon: const Icon(Icons.open_in_new, color: Colors.blue),
-                            label: const Text("Read More", style: TextStyle(color: Colors.blue)),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+        child: Column(
+          children: [
+            // Category Filter Dropdown
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
-            );
-          },
+              child: DropdownButton<String>(
+                value: selectedCategory,
+                isExpanded: true,
+                underline: const SizedBox(),
+                items: ["All", "Farming", "Health", "Water", "Technology"].map((String category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category, style: const TextStyle(fontSize: 16)),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value!;
+                  });
+                },
+              ),
+            ),
+
+            // Content Grid/List
+            Expanded(
+              child: isWideScreen
+                  ? GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 0.85,
+                      ),
+                      itemCount: filteredArticles.length,
+                      itemBuilder: (context, index) => _buildArticleCard(filteredArticles[index]),
+                    )
+                  : ListView.builder(
+                      itemCount: filteredArticles.length,
+                      itemBuilder: (context, index) => _buildArticleCard(filteredArticles[index]),
+                    ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildArticleCard(Map<String, String> article) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Article Image
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Image.asset(
+              article["image"]!,
+              height: 180,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Article Title
+                Text(
+                  article["title"]!,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 6),
+
+                // Article Description
+                Text(
+                  article["description"]!,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+
+                // Read More Button
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: () => _launchURL(article["url"]!),
+                    icon: const Icon(Icons.open_in_new, color: Colors.blue),
+                    label: const Text("Read More", style: TextStyle(color: Colors.blue)),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
